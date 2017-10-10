@@ -1,4 +1,3 @@
-import pprint
 import spotipy
 import spotipy.util as util
 import requests
@@ -33,7 +32,7 @@ if token:
     sp.trace = False
     # You can add a maximum of 100 tracks per request.
     results1 = sp.user_playlist_replace_tracks(user_id, playlist_id, track_ids[:100])
-    pprint.pprint(results1)
+    print(results1)
     results2 = sp.user_playlist_add_tracks(user_id, playlist_id, track_ids[100:])
     print(results2)
 
