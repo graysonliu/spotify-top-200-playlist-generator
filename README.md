@@ -18,11 +18,11 @@ chart_url: https://spotifycharts.com/regional/global/daily/latest/download
 
  **Where to get user_id and playlist_id?**
 
-Click `Copy Spotify URI` and you will get text like this:
+Click `Copy Spotify URI` in the image below and you will get text like this:
 
 > spotify:user:12135742379:playlist:6F61J2pfnBeVZkXfumFQIi
 
-In this case, user-id is `12135742379` and playlist-id is `6F61J2pfnBeVZkXfumFQIi`.
+In this case, user_id is `12135742379` and playlist_id is `6F61J2pfnBeVZkXfumFQIi`.
 
 ![](https://github.com/GraysonLiu/spotify-top-200-playlist-generator/blob/master/get-user-id-and-playlist-id.png)
 
