@@ -38,8 +38,12 @@ The data source is [Spotify Charts](https://spotifycharts.com). I use the global
 chart_url: https://spotifycharts.com/regional/us/daily/latest/download
 ```
 
+### Auto Update Playlist Daily
 
+Run shell command on your server:
 
+```shell
+python timer.py &
+```
 
-
-
+The output is redirected to file `out`.
