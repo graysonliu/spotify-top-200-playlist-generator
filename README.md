@@ -22,7 +22,7 @@ Click `Copy Spotify URI` and you will get text like this:
 
 > spotify:user:12135742379:playlist:6F61J2pfnBeVZkXfumFQIi
 
-For this case, user-id is `12135742379` and playlist-id is `6F61J2pfnBeVZkXfumFQIi`.
+In this case, user-id is `12135742379` and playlist-id is `6F61J2pfnBeVZkXfumFQIi`.
 ![](https://github.com/GraysonLiu/spotify-top-200-playlist-generator/blob/master/get-user-id-and-playlist-id.png)
 
 **Where to get client_id, client_secret and redirect_uri?**
