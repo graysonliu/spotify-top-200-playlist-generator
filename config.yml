@@ -1,0 +1,6 @@
+user_id: your-spotify-account-id
+playlist_id: your-spotify-playlist-id
+client_id: your-spotify-app-client-id
+client_secret: your-spotify-app-client-secret
+redirect_uri: your-spotify-app-redirect-uri
+chart_url: https://spotifycharts.com/regional/global/daily/latest/download
