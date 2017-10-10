@@ -3,16 +3,18 @@ import spotipy
 import spotipy.util as util
 import requests
 
-# replace with your own user id
-username = 'your-spotify-user-id'
 scope = 'playlist-modify-public'
 
-# replace with your own staff
+# replace with your own user id
+username = 'your-spotify-user-id'
+
+# replace with your own stuff
 token = util.prompt_for_user_token(username, scope, client_id='your-app-client-id',
                                    client_secret='your-app-client-secret', redirect_uri='your-app-redirect-url')
 
 # replace with your own playlist id
 playlist_id = 'your-spotify-playlist-id'
+
 track_ids = []
 
 r = requests.get('https://spotifycharts.com/regional/global/daily/latest/download')
