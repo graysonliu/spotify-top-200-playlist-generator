@@ -22,12 +22,17 @@ scope = 'playlist-modify-public'
 
 token = util.prompt_for_user_token(user_id, scope, client_id, client_secret, redirect_uri)
 
+
+def get_chart_url(region_code):
+    return 'https://spotifycharts.com/regional/' + region_code + '/daily/latest/download'
+
+
 if token:
     sp = spotipy.Spotify(auth=token)
     sp.trace = False
-    for region, info in generator.items():
-        playlist_id = str(info).partition('||')[0].strip()
-        chart_url = str(info).partition('||')[2].strip()
+    for (region, playlist_id) in generator.items():
+        playlist_id = str(playlist_id).strip()
+        chart_url = get_chart_url(region)
 
         r = requests.get(chart_url)
         tracks = r.text.splitlines()[1:]
