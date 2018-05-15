@@ -3,8 +3,12 @@ import spotipy.util as util
 import requests
 import time
 import yaml
+import sys
+import os
 
 ISO_TIME_FORMAT = '%Y-%m-%d %X'
+project_dir = os.path.split(os.path.realpath(sys.argv[0]))[0]
+os.chdir(project_dir)
 
 try:
     config_file = open('config.bak.yml', 'r')
