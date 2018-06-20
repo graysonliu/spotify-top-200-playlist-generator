@@ -42,7 +42,7 @@ if token:
         lines = r.text.splitlines()
         track_ids = []
         for line in lines:
-            if line[0].isdigit:
+            if line[0].isdigit():
                 track_ids.append(line.rpartition('/')[2])
 
         # You can add a maximum of 100 tracks per request.
