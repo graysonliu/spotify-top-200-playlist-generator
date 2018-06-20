@@ -39,10 +39,11 @@ if token:
         chart_url = get_chart_url(region)
 
         r = requests.get(chart_url)
-        tracks = r.text.splitlines()[1:]
+        lines = r.text.splitlines()
         track_ids = []
-        for line in tracks:
-            track_ids.append(line.rpartition('/')[2])
+        for line in lines:
+            if line[0].isdigit:
+                track_ids.append(line.rpartition('/')[2])
 
         # You can add a maximum of 100 tracks per request.
         results1 = sp.user_playlist_replace_tracks(user_id, playlist_id, track_ids[:100])
