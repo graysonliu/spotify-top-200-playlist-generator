@@ -15,7 +15,7 @@ try:
 except FileNotFoundError as e:
     config_file = open('config.yml', 'r')
 finally:
-    config = yaml.load(config_file)
+    config = yaml.safe_load(config_file)
     user_id = str(config['user_id']).strip()
     client_id = str(config['client_id']).strip()
     client_secret = str(config['client_secret']).strip()
@@ -46,7 +46,8 @@ if token:
                 track_ids.append(line.rpartition('/')[2])
 
         # You can add a maximum of 100 tracks per request.
-        results1 = sp.user_playlist_replace_tracks(user_id, playlist_id, track_ids[:100])
+        sp.user_playlist_replace_tracks(user_id, playlist_id, [])
+        results1 = sp.user_playlist_add_tracks(user_id, playlist_id, track_ids[:100])
         print(region, results1, time.strftime(ISO_TIME_FORMAT, time.localtime()))
         results2 = sp.user_playlist_add_tracks(user_id, playlist_id, track_ids[100:])
         print(region, results2, time.strftime(ISO_TIME_FORMAT, time.localtime()))
