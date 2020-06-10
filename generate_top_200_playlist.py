@@ -52,7 +52,10 @@ if token:
             for url in track_urls:
                 track_ids.append(url.rpartition('/')[2])
             sp.user_playlist_change_details(user_id, playlist_id,
-                                            ' '.join(['Spotify Top 200', country, date]))
+                                            name='{country} Top 200 Daily'.format(country=country),
+                                            description='Date: {date}| \
+                                            Based on data from spotifycharts.com| \
+                                            Powered by spotify-top-200-playlist-generator@GitHub'.format(date=date))
 
             sp.user_playlist_replace_tracks(user_id, playlist_id, [])
             # You can add a maximum of 100 tracks per request.
