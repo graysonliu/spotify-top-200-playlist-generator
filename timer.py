@@ -7,7 +7,7 @@ os.chdir(project_dir)
 
 
 def update_playlist_daily():
-    os.popen('python generate_top_200_playlist.py >> out')
+    os.popen('/root/ws/python3/bin/python generate_top_200_playlist.py >> out')
     timer = threading.Timer(60 * 60 * 12, update_playlist_daily)
     timer.start()
 
