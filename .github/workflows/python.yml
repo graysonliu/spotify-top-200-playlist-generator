@@ -35,7 +35,7 @@ jobs:
         run: printf ${{ secrets.SPOTIFY_AUTH_CACHE }} > .cache
       
       - name: Print .cache
-        run: echo .cache
+        run: cat .cache
         
       - name: Set client id and secrect id as environment variables and update playlists
         env:
