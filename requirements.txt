@@ -3,3 +3,4 @@ requests
 PyYAML
 lxml
 python-dotenv
+pynacl

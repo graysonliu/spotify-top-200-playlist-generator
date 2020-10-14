@@ -18,10 +18,35 @@ client_secret = os.getenv('CLIENT_SECRET')
 
 # for github actions, create .cache file from the secret, which is set to the environment variable AUTH_CACHE
 auth_cache = os.getenv('AUTH_CACHE')
-print(auth_cache)
 if auth_cache:
     with open('.cache', 'w') as f:
         f.write(auth_cache)
+
+    # update secret AUTH_CACHE in case that content in .cache is changed during runtime (e.g. token is refreshed)
+    # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#create-or-update-a-repository-secret
+    from base64 import b64encode
+    from nacl import encoding, public
+
+
+    def encrypt(public_key: str, secret_value: str) -> str:
+        """Encrypt a Unicode string using the public key."""
+        public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
+        sealed_box = public.SealedBox(public_key)
+        encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
+        return b64encode(encrypted).decode("utf-8")
+
+
+    with open('.cache', 'r') as f:
+        encrypted_value = encrypt('AUTH_CACHE', f.read())
+        owner = 'graysonliu'
+        repo = 'spotify-top-200-playlist-generator'
+        secret_name = 'AUTH_CACHE'
+        headers = {'accept': 'application/vnd.github.v3+json'}
+        data = {'encrypted_value': encrypted_value}
+        r = requests.put(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/{secret_name}',
+                         headers=headers, data=data)
+        if r.ok:
+            print(f'Secret {secret_name} updated.')
 
 ISO_TIME_FORMAT = '%Y-%m-%d %X'
 
@@ -47,7 +72,7 @@ for (region, playlist_id) in generator.items():
     chart_page = get_chart_page(region)
 
     r = requests.get(chart_page)
-    if r.status_code == 200:
+    if r.ok:
         tree = html.fromstring(r.content)
         selected_values = tree.xpath('//div[@class="responsive-select-value"]/text()')
         country = selected_values[0]

@@ -5,17 +5,22 @@ Powered by [Spotipy](https://github.com/plamere/spotipy).
 
 ### How to Use
 
-Fill config.yml with your own info:
+Fill `config.yml` with your own info:
 
 ```yaml
 user_id: your-spotify-account-id
-client_id: your-spotify-app-client-id
-client_secret: your-spotify-app-client-secret
 redirect_uri: your-spotify-app-redirect-uri
 generator:
 # region_code: playlist_id
   global: your-global-top-200-playlist-id
   us: your-us-top-200-playlist-id
+```
+
+Create `.env` and set environment variables:
+
+```bash
+CLIENT_ID=your-spotify-app-client-id
+CLIENT_SECRET=your-spotify-app-client-secret
 ```
 
  **Where to get user_id and playlist_id?**
@@ -26,20 +31,37 @@ Click `Copy Spotify URI` in the image below and you will get text like this:
 
 In this case, user_id is `12135742379` and playlist_id is `6F61J2pfnBeVZkXfumFQIi`.
 
-![](https://github.com/GraysonLiu/spotify-top-200-playlist-generator/blob/master/get-user-id-and-playlist-id.png)
+![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/get-user-id-and-playlist-id.png)
 
 **Where to get client_id, client_secret and redirect_uri?**
 
-Go [here](https://developer.spotify.com/my-applications) to create your own Spotify application and get all these stuff.
+Go [here](https://developer.spotify.com/my-applications) to create your own Spotify application and you will be given a Client ID and a Client Secret. Then, you can edit your redirect URL in app settings. We recommend using 'http://localhost:[PORT_NUMBER]' as your redirect URL since this will let your spotify app automatically open the browser and authorize the app if you have logged in your Spotify account in the same browser.
 
-Then, you can run the script. During the runtime, you need to authorize your Spotify account for your Spotify application if you have never done this before. Follow the [instruction](http://spotipy.readthedocs.io/en/latest/#authorized-requests) to get authorized. The credentials will be cached in local file `.cache-*` which can be used to automatically re-authorize expired tokens, so you won't need to go through this procedure next time.
+**Scheduled update with Github Actions.**
 
-### Auto Update Playlist Daily
+Here is the [workflow](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/.github/workflows/python.yml) that can help you update your Top 200 playlists. Sensitive information like client id and client secret should not be exposed. Therefore, we add them as secrets at Github, and set them as environment variables in the workflow when executing the Python script. Also, since Github Actions works in a headless environment, it is impossible to use a browser for authorization. Our strategy is, we first authorize the app locally, which will give us a `.cache` file that saves tokens. We create a secret that saves the content of `.cache` at Github and also set it as a environment variable in the runtime. In Python script, we fetch this environment variable and create a `.cache` file using this secret. This newly created `.cache` file by Python will be used for authorization.
 
-Run shell command on your server:
+Created secrets:
 
-```shell
-python timer.py &
+![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/secrets.png)
+
+In Python script:
+
+```python
+# for github actions, create .cache file from the secret, which is set to the environment variable AUTH_CACHE
+auth_cache = os.getenv('AUTH_CACHE')
+if auth_cache:
+    with open('.cache', 'w') as f:
+        f.write(auth_cache)
 ```
 
-The output is redirected to file `out`.
+In workflow:
+```yaml
+- name: Set environment variables with secrets and update playlists
+  env:
+    CLIENT_ID: ${{ secrets.CLIENT_ID }}
+    CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    AUTH_CACHE: ${{ secrets.AUTH_CACHE }}
+  run: python generate_top_200_playlist.py
+```
+

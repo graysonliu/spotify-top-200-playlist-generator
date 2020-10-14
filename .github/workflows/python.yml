@@ -2,7 +2,9 @@ name: scheduled spotify top 200 playlists update
 
 on:
   push:
-    branches: master
+    branches:
+      - master
+      - test-actions
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '0 0,6,12,18 * * *'
