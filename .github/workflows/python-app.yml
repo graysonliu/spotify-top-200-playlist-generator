@@ -1,9 +1,11 @@
 name: scheduled spotify top 200 playlists update
 
 on:
+  push:
+    branches: master
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '10-11 * * * *'
+    - cron:  '0 0,6,12,18 * * *'
 
 jobs:
   build:
@@ -34,4 +36,3 @@ jobs:
           SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
           SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
         run: python generate_top_200_playlist.py
-        
