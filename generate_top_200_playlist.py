@@ -31,6 +31,7 @@ if auth_cache:
     # Get the public key to encrypt secrets
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
     r = requests.get(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/public-key')
+    print(r.json())
     public_key = r.json()['key']
 
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#create-or-update-a-repository-secret
