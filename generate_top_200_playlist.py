@@ -23,6 +23,16 @@ if auth_cache:
         f.write(auth_cache)
 
     # update secret AUTH_CACHE in case that content in .cache is changed during runtime (e.g. token is refreshed)
+    owner = 'graysonliu'
+    repo = 'spotify-top-200-playlist-generator'
+    secret_name = 'AUTH_CACHE'
+    headers = {'accept': 'application/vnd.github.v3+json'}
+
+    # Get the public key to encrypt secrets
+    # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
+    r = requests.get(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/public-key')
+    public_key = r.json()['key']
+
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#create-or-update-a-repository-secret
     from base64 import b64encode
     from nacl import encoding, public
@@ -37,11 +47,7 @@ if auth_cache:
 
 
     with open('.cache', 'r') as f:
-        encrypted_value = encrypt('AUTH_CACHE', f.read())
-        owner = 'graysonliu'
-        repo = 'spotify-top-200-playlist-generator'
-        secret_name = 'AUTH_CACHE'
-        headers = {'accept': 'application/vnd.github.v3+json'}
+        encrypted_value = encrypt(public_key, f.read())
         data = {'encrypted_value': encrypted_value}
         r = requests.put(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/{secret_name}',
                          headers=headers, data=data)
