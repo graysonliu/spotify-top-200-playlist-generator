@@ -1,6 +1,4 @@
 .idea/
 .cache*
-config.bak.yml
-out
 test.py
 .env
