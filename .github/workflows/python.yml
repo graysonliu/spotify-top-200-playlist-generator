@@ -33,9 +33,16 @@ jobs:
   
       - name: Set environment variables with secrets and update playlists
         env:
+          SPOTIFY_AUTH_CACHE: ${{ secrets.SPOTIFY_AUTH_CACHE }}
+        run: python create_auth_cache_for_github_actions.py
+      
+      - name: Print cache
+        run: cat .cache
+        
+      - name: Set environment variables with secrets and update playlists
+        env:
           SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
           SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
-          SPOTIFY_AUTH_CACHE: ${{ secrets.SPOTIFY_AUTH_CACHE }}
         run: python generate_top_200_playlist.py
       
       - name: Delete local authorization cache file
