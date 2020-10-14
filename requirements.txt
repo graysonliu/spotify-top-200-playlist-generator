@@ -1,0 +1,5 @@
+spotipy
+requests
+PyYAML
+lxml
+python-dotenv
