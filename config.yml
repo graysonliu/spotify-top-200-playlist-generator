@@ -1,8 +1,6 @@
-user_id: your-spotify-account-id
-client_id: your-spotify-app-client-id
-client_secret: your-spotify-app-client-secret
-redirect_uri: your-spotify-app-redirect-uri
+user_id: 12135742379
+redirect_uri: http://localhost:8080
 generator:
 # region_code: playlist_id
-  global: your-global-top-200-playlist-id
-  us: your-us-top-200-playlist-id
+  us: 451I9htT786qoNr03QB8WE
+  gb: 6F61J2pfnBeVZkXfumFQIi
