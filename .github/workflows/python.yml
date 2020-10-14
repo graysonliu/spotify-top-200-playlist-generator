@@ -33,6 +33,9 @@ jobs:
       
       - name: Create local authorization cache file
         run: printf ${{ secrets.SPOTIFY_AUTH_CACHE }} > .cache
+      
+      - name: Print .cache
+        run: echo .cache
         
       - name: Set client id and secrect id as environment variables and update playlists
         env:
