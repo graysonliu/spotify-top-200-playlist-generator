@@ -31,11 +31,8 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
-      - name: Print cache
-        run: echo ${{ secrets.SPOTIFY_AUTH_CACHE }}
-      
-      - name: Get authorization cache
-        run: echo ${{ secrets.SPOTIFY_AUTH_CACHE }} > .cache
+      - name: Create local authorization cache file
+        run: printf ${{ secrets.SPOTIFY_AUTH_CACHE }} > .cache
         
       - name: Set client id and secrect id as environment variables and update playlists
         env:
