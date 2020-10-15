@@ -1,4 +1,7 @@
+![scheduled task](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/.github/workflows/python.yml/badge.svg)
+
 # spotify-top-200-playlist-generator
+
 Generate Spotify top 200 playlist from [Spotify Charts](https://spotifycharts.com).
 
 Powered by [Spotipy](https://github.com/plamere/spotipy). 
