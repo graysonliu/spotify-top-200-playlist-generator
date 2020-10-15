@@ -60,10 +60,12 @@ if auth_cache:
 
 
     with open('.cache', 'r') as f:
+        print(f'public key: {public_key}')
         encrypted_value = encrypt(public_key, f.read())
         data = {'encrypted_value': encrypted_value}
         r = requests.put(f'{github_api_url}/repos/{github_repo}/actions/secrets/{secret_name}', headers=headers,
                          json=data, auth=auth)
+        print(r.json())
         if r.ok:
             print(f'Secret {secret_name} updated.')
 
