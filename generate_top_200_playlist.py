@@ -25,8 +25,12 @@ if auth_cache:
 
     # update secret AUTH_CACHE in case that content in .cache is changed during runtime (e.g. token is refreshed)
     secret_name = 'AUTH_CACHE'
-    github_token = os.getenv('GITHUB_TOKEN')  # for authorization, we will put it in headers of Github API requests
-    headers = {'Accept': 'application/vnd.github.v3+json', 'authorization': f'Bearer {github_token}'}
+    # we need authentication to write secrets
+    # default GITHUB_TOKEN does not have the permission to write secrets, we need to create a personal access token
+    # we also need to set this personal access token as an environment variable
+    token_write_secrets = os.getenv('TOKEN_WRITE_SECRETS')
+    # we will put it in headers of Github API requests
+    headers = {'Accept': 'application/vnd.github.v3+json', 'authorization': f'Bearer {token_write_secrets}'}
 
     # GITHUB_API_URL and GITHUB_REPOSITORY are default environment variables in Github Actions
     github_api_url = os.getenv('GITHUB_API_URL')
