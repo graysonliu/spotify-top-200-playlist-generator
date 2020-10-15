@@ -1,3 +1,5 @@
+name: scheduled task
+
 on:
   push:
     branches:
