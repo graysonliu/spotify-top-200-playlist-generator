@@ -19,18 +19,22 @@ client_secret = os.getenv('CLIENT_SECRET')
 # for github actions, create .cache file from the secret, which is set to the environment variable AUTH_CACHE
 auth_cache = os.getenv('AUTH_CACHE')
 if auth_cache:
+
     with open('.cache', 'w') as f:
         f.write(auth_cache)
 
     # update secret AUTH_CACHE in case that content in .cache is changed during runtime (e.g. token is refreshed)
-    owner = 'graysonliu'
-    repo = 'spotify-top-200-playlist-generator'
     secret_name = 'AUTH_CACHE'
-    headers = {'accept': 'application/vnd.github.v3+json'}
+    github_token = os.getenv('GITHUB_TOKEN')  # for authorization, we will put it in headers of Github API requests
+    headers = {'Accept': 'application/vnd.github.v3+json', 'authorization': f'Bearer {github_token}'}
+
+    # GITHUB_API_URL and GITHUB_REPOSITORY are default environment variables in Github Actions
+    github_api_url = os.getenv('GITHUB_API_URL')
+    github_repo = os.getenv('GITHUB_REPOSITORY')
 
     # Get the public key to encrypt secrets
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
-    r = requests.get(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/public-key')
+    r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers)
     print(r.json())
     public_key = r.json()['key']
 
@@ -50,8 +54,8 @@ if auth_cache:
     with open('.cache', 'r') as f:
         encrypted_value = encrypt(public_key, f.read())
         data = {'encrypted_value': encrypted_value}
-        r = requests.put(f'https://api.github.com/repos/{owner}/{repo}/actions/secrets/{secret_name}',
-                         headers=headers, data=data)
+        r = requests.put(f'{github_api_url}/repos/{github_repo}/actions/secrets/{secret_name}',
+                         headers=headers, json=data)
         if r.ok:
             print(f'Secret {secret_name} updated.')
 

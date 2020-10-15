@@ -38,8 +38,7 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           AUTH_CACHE: ${{ secrets.AUTH_CACHE }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python generate_top_200_playlist.py
 
       - name: Delete local authorization cache file
