@@ -40,7 +40,7 @@ def get_chart_page(region_code):
 
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
-sp.trace = False
+
 for (region, playlist_id) in generator.items():
     playlist_id = str(playlist_id).strip()
     chart_page = get_chart_page(region)
