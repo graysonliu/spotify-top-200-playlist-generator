@@ -2,10 +2,12 @@ name: scheduled spotify top 200 playlists update
 
 on:
   push:
-    branches: master
+    branches:
+      - master
+      - test-actions
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 0,6,12,18 * * *'
+    - cron: '0 0,6,12,18 * * *'
 
 jobs:
   build:
@@ -30,13 +32,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        
+
       - name: Set environment variables with secrets and update playlists
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           AUTH_CACHE: ${{ secrets.AUTH_CACHE }}
+          TOKEN_WRITE_SECRETS: ${{ secrets.TOKEN_WRITE_SECRETS }}
         run: python generate_top_200_playlist.py
-      
+
       - name: Delete local authorization cache file
         run: rm -f .cache
