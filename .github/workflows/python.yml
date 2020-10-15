@@ -1,4 +1,4 @@
-name: scheduled spotify top 200 playlists update
+name: scheduled task
 
 on:
   push:
