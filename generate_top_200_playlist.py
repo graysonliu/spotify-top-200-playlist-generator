@@ -35,6 +35,8 @@ if auth_cache:
     github_repo = os.getenv('GITHUB_REPOSITORY')
     github_actor = os.getenv('GITHUB_ACTOR')
 
+    print(github_api_url, github_repo, github_actor, token_write_secrets)
+
     # for authentication
     from requests.auth import HTTPBasicAuth
 
