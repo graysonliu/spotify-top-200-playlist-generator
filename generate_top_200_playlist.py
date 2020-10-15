@@ -29,16 +29,21 @@ if auth_cache:
     # default GITHUB_TOKEN does not have the permission to write secrets, we need to create a personal access token
     # we also need to set this personal access token as an environment variable
     token_write_secrets = os.getenv('TOKEN_WRITE_SECRETS')
-    # we will put it in headers of Github API requests
-    headers = {'Accept': 'application/vnd.github.v3+json', 'authorization': f'Bearer {token_write_secrets}'}
 
-    # GITHUB_API_URL and GITHUB_REPOSITORY are default environment variables in Github Actions
+    # these are default environment variables in Github Actions
     github_api_url = os.getenv('GITHUB_API_URL')
     github_repo = os.getenv('GITHUB_REPOSITORY')
+    github_actor = os.getenv('GITHUB_ACTOR')
 
+    # for authentication
+    from requests.auth import HTTPDigestAuth
+
+    auth = HTTPDigestAuth(github_actor, token_write_secrets)
+
+    headers = {'Accept': 'application/vnd.github.v3+json'}
     # Get the public key to encrypt secrets
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
-    r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers)
+    r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers, auth=auth)
     print(r.json())
     public_key = r.json()['key']
 
@@ -58,8 +63,8 @@ if auth_cache:
     with open('.cache', 'r') as f:
         encrypted_value = encrypt(public_key, f.read())
         data = {'encrypted_value': encrypted_value}
-        r = requests.put(f'{github_api_url}/repos/{github_repo}/actions/secrets/{secret_name}',
-                         headers=headers, json=data)
+        r = requests.put(f'{github_api_url}/repos/{github_repo}/actions/secrets/{secret_name}', headers=headers,
+                         json=data, auth=auth)
         if r.ok:
             print(f'Secret {secret_name} updated.')
 
