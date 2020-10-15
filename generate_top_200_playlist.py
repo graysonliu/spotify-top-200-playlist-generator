@@ -71,7 +71,7 @@ for (region, playlist_id) in generator.items():
         results2 = sp.playlist_add_items(playlist_id, track_ids[100:])
         print(region, results2, time.strftime(ISO_TIME_FORMAT, time.localtime()))
 
-# for github actions, write the content of .cache into AUTH_CACHE
+# for github actions, write the content of .cache back into AUTH_CACHE
 if auth_cache:
     # update secret AUTH_CACHE in case that content in .cache is changed during runtime (e.g. token is refreshed)
     secret_name = 'AUTH_CACHE'
