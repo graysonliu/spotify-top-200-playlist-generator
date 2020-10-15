@@ -1,4 +1,4 @@
-![scheduled task](https://github.com/graysonliu/spotify-top-200-playlist-generator/workflows/python.yml/badge.svg)
+![scheduled task](https://github.com/graysonliu/spotify-top-200-playlist-generator/workflows/.github/workflows/python.yml/badge.svg)
 
 # spotify-top-200-playlist-generator
 
