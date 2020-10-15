@@ -2,5 +2,6 @@ user_id: 12135742379
 redirect_uri: http://localhost:8080
 generator:
 # region_code: playlist_id
+  global: 5C9FHaxNhlKhZtfW9MxgWq
   us: 451I9htT786qoNr03QB8WE
   gb: 6F61J2pfnBeVZkXfumFQIi

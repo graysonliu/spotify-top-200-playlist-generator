@@ -60,8 +60,8 @@ for (region, playlist_id) in generator.items():
         sp.playlist_change_details(playlist_id,
                                    name='{country} Top 200 Daily'.format(country=country),
                                    description=('Date: {date} | '
-                                                'Based on data from spotifycharts.com | '
-                                                'Powered by spotify-top-200-playlist-generator@GitHub')
+                                                'Data from spotifycharts.com | '
+                                                'Powered by graysonliu/spotify-top-200-playlist-generator@GitHub')
                                    .format(date=date))
 
         sp.playlist_replace_items(playlist_id, [])
