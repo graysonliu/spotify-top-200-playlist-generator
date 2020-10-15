@@ -45,6 +45,7 @@ if auth_cache:
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
     r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers, auth=auth)
     public_key = r.json()['key']
+    key_id = r.json()['key_id']
 
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#create-or-update-a-repository-secret
     from base64 import b64encode
@@ -60,12 +61,10 @@ if auth_cache:
 
 
     with open('.cache', 'r') as f:
-        print(f'public key: {public_key}')
         encrypted_value = encrypt(public_key, f.read())
-        data = {'encrypted_value': encrypted_value}
+        data = {'encrypted_value': encrypted_value, 'key_id': key_id}
         r = requests.put(f'{github_api_url}/repos/{github_repo}/actions/secrets/{secret_name}', headers=headers,
                          json=data, auth=auth)
-        print(r.json())
         if r.ok:
             print(f'Secret {secret_name} updated.')
 
