@@ -35,8 +35,6 @@ if auth_cache:
     github_repo = os.getenv('GITHUB_REPOSITORY')
     github_actor = os.getenv('GITHUB_ACTOR')
 
-    print(github_api_url, github_repo, github_actor, token_write_secrets)
-
     # for authentication
     from requests.auth import HTTPBasicAuth
 
@@ -46,7 +44,6 @@ if auth_cache:
     # Get the public key to encrypt secrets
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
     r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers, auth=auth)
-    print(r.json())
     public_key = r.json()['key']
 
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#create-or-update-a-repository-secret
