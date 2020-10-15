@@ -36,9 +36,9 @@ if auth_cache:
     github_actor = os.getenv('GITHUB_ACTOR')
 
     # for authentication
-    from requests.auth import HTTPDigestAuth
+    from requests.auth import HTTPBasicAuth
 
-    auth = HTTPDigestAuth(github_actor, token_write_secrets)
+    auth = HTTPBasicAuth(github_actor, token_write_secrets)
 
     headers = {'Accept': 'application/vnd.github.v3+json'}
     # Get the public key to encrypt secrets
