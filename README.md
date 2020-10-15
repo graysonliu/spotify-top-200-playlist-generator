@@ -31,7 +31,7 @@ Click `Copy Spotify URI` in the image below and you will get text like this:
 
 In this case, user_id is `12135742379` and playlist_id is `6F61J2pfnBeVZkXfumFQIi`.
 
-![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/get-user-id-and-playlist-id.png)
+![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/images/get_user_id_and_playlist_id.png)
 
 **Where to get client_id, client_secret and redirect_uri?**
 
@@ -39,29 +39,15 @@ Go [here](https://developer.spotify.com/my-applications) to create your own Spot
 
 **Scheduled update with Github Actions.**
 
-Here is the [workflow](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/.github/workflows/python.yml) that can help you update your Top 200 playlists. Sensitive information like client id and client secret should not be exposed. Therefore, we add them as secrets at Github, and set them as environment variables in the workflow when executing the Python script. Also, since Github Actions works in a headless environment, it is impossible to use a browser for authorization. Our strategy is, we first authorize the app locally, which will give us a `.cache` file that saves tokens. We create a secret that saves the content of `.cache` at Github and also set it as a environment variable in the runtime. In Python script, we fetch this environment variable and create a `.cache` file using this secret. This newly created `.cache` file by Python will be used for authorization.
+Here is the [workflow](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/.github/workflows/python.yml) that can help you update your Top 200 playlists. Sensitive information like client id and client secret should not be exposed. Therefore, we add them as secrets at Github, and set them as environment variables in the workflow. Also, since Github Actions works in a headless environment, it is impossible to use a browser for authorization. Our strategy is, we first authorize the app locally, which will give us a `.cache` file that saves tokens. We create secret `AUTH_CACHE` that saves the content of `.cache` at Github and also set it as a environment variable in the runtime. In Python script, we fetch this environment variable and create a `.cache` file using this secret. This newly created `.cache` file by Python will be used for authentication.
 
-Created secrets:
+Another thing is, tokens in `.cache` could be refreshed in the runtime. If we do not update `AUTH_CACHE` to keep up with the content of `.cache`, tokens saved in `AUTH_CACHE` could be expired. Therefore, after the playlists are updated, we have to write the content of `.cache` to secret `AUTH_CACHE`. To write secrets of a Github repo, we need a token with specific scopes of permissions. First, we create a personal access token named `TOKEN_WRITE_SECRETS` with scopes as follows:
 
-![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/secrets.png)
+![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/images/create_personal_access_token.png)
 
-In Python script:
+Copy the generated token, and add it to secrets. We also name this secret `TOKEN_WRITE_SECRETS`.
 
-```python
-# for github actions, create .cache file from the secret, which is set to the environment variable AUTH_CACHE
-auth_cache = os.getenv('AUTH_CACHE')
-if auth_cache:
-    with open('.cache', 'w') as f:
-        f.write(auth_cache)
-```
+In total, we should have for secrets:
 
-In workflow:
-```yaml
-- name: Set environment variables with secrets and update playlists
-  env:
-    CLIENT_ID: ${{ secrets.CLIENT_ID }}
-    CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-    AUTH_CACHE: ${{ secrets.AUTH_CACHE }}
-  run: python generate_top_200_playlist.py
-```
+![](https://github.com/graysonliu/spotify-top-200-playlist-generator/blob/master/images/secrets.png)
 
