@@ -64,12 +64,14 @@ for (region, playlist_id) in generator.items():
                                                 'Powered by graysonliu/spotify-top-200-playlist-generator@GitHub')
                                    .format(date=date))
 
-        sp.playlist_replace_items(playlist_id, [])
-        # You can add a maximum of 100 tracks per request.
-        results1 = sp.playlist_add_items(playlist_id, track_ids[:100])
-        print(region, results1, time.strftime(ISO_TIME_FORMAT, time.localtime()))
-        results2 = sp.playlist_add_items(playlist_id, track_ids[100:])
-        print(region, results2, time.strftime(ISO_TIME_FORMAT, time.localtime()))
+        if len(track_ids) > 0:
+            sp.playlist_replace_items(playlist_id, [])
+            # You can add a maximum of 100 tracks per request.
+            results1 = sp.playlist_add_items(playlist_id, track_ids[:100])
+            print(region, results1, time.strftime(ISO_TIME_FORMAT, time.localtime()))
+        if len(track_ids) > 100:
+            results2 = sp.playlist_add_items(playlist_id, track_ids[100:])
+            print(region, results2, time.strftime(ISO_TIME_FORMAT, time.localtime()))
 
 # for github actions, write the content of .cache back into AUTH_CACHE
 if auth_cache:
@@ -91,7 +93,7 @@ if auth_cache:
     auth = HTTPBasicAuth(github_actor, token_write_secrets)
 
     headers = {'Accept': 'application/vnd.github.v3+json'}
-    # Get the public key to encrypt secrets
+    # Get the public key to encrypt secretsh
     # reference: https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#get-a-repository-public-key
     r = requests.get(f'{github_api_url}/repos/{github_repo}/actions/secrets/public-key', headers=headers, auth=auth)
     public_key = r.json()['key']
